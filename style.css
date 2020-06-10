@@ -1,0 +1,22 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+#grid {
+  background-color: yellow;
+  height: 400px;
+  width: 200px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#grid div {
+  height: 1.25rem;
+  width: 1.25rem;
+}
+
+.tetromino {
+  background-color: aquamarine;
+}
