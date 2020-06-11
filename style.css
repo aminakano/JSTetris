@@ -1,13 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Teko:wght@700&display=swap');
+
 .container {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
 }
+
+h3 {
+  font-family: 'Teko', sans-serif;
+}
 #grid {
   background-color: yellow;
-  height: 400px;
-  width: 200px;
+  height: 25rem;
+  width: 12.5rem;
   display: flex;
   flex-wrap: wrap;
 }
@@ -19,4 +25,18 @@
 
 .tetromino {
   background-color: aquamarine;
+  /* border: 1px solid #fff; */
+}
+
+.mini-grid {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  flex-wrap: wrap;
+  background-color: yellow;
+}
+
+.mini-grid div {
+  width: 20px;
+  height: 20px;
 }

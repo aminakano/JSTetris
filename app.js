@@ -1,10 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const grid = document.getElementById("grid");
-  for (let i = 0; i < 210; i++) {
-    let div = document.createElement("div");
-    if(i >= 200) div.className = "taken";
-    grid.append(div);
-  }
+  domCreation();
+
   let squares = Array.from(document.querySelectorAll(".grid div"));
   console.log(squares);
   
@@ -56,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
   ];
 
   let currentPosition = 4;
-  let currentRotation = 3;
+  let currentRotation = 0;
 
   let random = Math.floor(Math.random() * theTetrominoes.length);
   
@@ -80,7 +76,26 @@ document.addEventListener("DOMContentLoaded", () => {
     draw()
     freeze();
   }
+
   timerId = setInterval(moveDown, 1000);
+
+  const control = e => {
+    switch(e.keyCode) {
+      case 37 : moveLeft();
+      break;
+
+      case 38 : rotate();
+      break;
+
+      case 39 : moveRight();
+      break;
+
+      case 40 : moveDown();
+      default:
+    }
+  }
+
+  document.addEventListener('keyup', control);
 
   const freeze = () => {
     if(current.some(i => squares[currentPosition + i + GRID_WIDTH].classList.contains("taken"))) {
@@ -93,4 +108,70 @@ document.addEventListener("DOMContentLoaded", () => {
       draw();
     }
   }
+
+  const moveLeft = () => {
+    undraw();
+    const isAtLeftEdge = current.some(
+      (i) => (currentPosition + i) % GRID_WIDTH === 0
+    );
+
+    console.log(isAtLeftEdge);
+    
+
+    if(!isAtLeftEdge) currentPosition -= 1;
+
+    if(current.some(i => squares[currentPosition + i].classList.contains("taken"))) {
+      currentPosition += 1;
+    }
+    draw();
+  }
+
+  const moveRight = () => {
+    undraw();
+    const isAtRightEdge = current.some(i => (currentPosition + i) % GRID_WIDTH === GRID_WIDTH - 1);
+
+    if(!isAtRightEdge) currentPosition += 1;
+
+    if(current.some(i => squares[currentPosition + i].classList.contains("taken"))) {
+      currentPosition -= 1;
+    }
+    draw();
+  }
+
+  const rotate = () => {
+    undraw();
+    currentRotation ++
+    if(currentRotation == current.length) {
+      currentRotation = 0;
+    }
+    current = theTetrominoes[random][currentRotation];
+    draw();
+  }
+
+  const displaySquares = document.querySelectorAll(".mini-grid div")
+  const displayWidth = 4;
+  let displayIndex = 0;
+
+  const upNextTetrominoes = [
+    
+  ]
+
 })
+
+const domCreation = () => {
+  const grid = document.getElementById("grid");
+  for (let i = 0; i < 210; i++) {
+    let div = document.createElement("div");
+    if (i >= 200) div.className = "taken";
+    grid.append(div);
+  }
+
+  const container = document.querySelector(".container");
+  const minigrid = document.createElement("div");
+  minigrid.className = "mini-grid";
+  container.appendChild(minigrid);
+  for (let i = 0; i < 16; i++) {
+    let div = document.createElement("div");
+    minigrid.append(div);
+  }
+}
