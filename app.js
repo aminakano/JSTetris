@@ -2,11 +2,11 @@ document.addEventListener("DOMContentLoaded", () => {
   domCreation();
 
   let squares = Array.from(document.querySelectorAll(".grid div"));
-  console.log(squares);
   
   const scoreDisplay = document.querySelector("#score");
   const startBtn = document.querySelector("#start-button");
   const GRID_WIDTH = 10;
+  let score = 0;
 
   const lTetromino = [
     [1, GRID_WIDTH + 1, GRID_WIDTH * 2 + 1, 2],
@@ -110,6 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
       currentPosition = 4;
       draw();
       displayShape();
+      addScore();
     }
   }
 
@@ -118,9 +119,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const isAtLeftEdge = current.some(
       (i) => (currentPosition + i) % GRID_WIDTH === 0
     );
-
-    console.log(isAtLeftEdge);
-    
 
     if(!isAtLeftEdge) currentPosition -= 1;
 
@@ -186,6 +184,39 @@ document.addEventListener("DOMContentLoaded", () => {
       displayShape();
     }
   })
+
+  const addScore = () => {
+    for (let i = 0; i < 199; i += GRID_WIDTH) {
+      const row = [
+        i,
+        i + 1,
+        i + 2,
+        i + 3,
+        i + 4,
+        i + 5,
+        i + 6,
+        i + 7,
+        i + 8,
+        i + 9,
+      ];
+
+      if (row.every((i) => squares[i].classList.contains("taken"))) {
+        score += 10;
+        scoreDisplay.innerHTML = score;
+
+        row.forEach((i) => {
+          squares[i].classList.remove("taken");
+          squares[i].classList.remove("tetromino")
+        });
+
+        const squaresRemoved = squares.splice(i, GRID_WIDTH);
+        console.log(squaresRemoved);
+
+        squares = squaresRemoved.concat(squares)
+        squares.forEach(cell => grid.appendChild(cell))
+      }
+    }
+  }
 
 })
 
