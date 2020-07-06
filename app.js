@@ -7,6 +7,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const startBtn = document.querySelector("#start-button");
   const GRID_WIDTH = 10;
   let score = 0;
+  const colors = [
+    "orange",
+    "red",
+    "purple",
+    "green",
+    "blue"
+  ]
 
   const lTetromino = [
     [1, GRID_WIDTH + 1, GRID_WIDTH * 2 + 1, 2],
@@ -63,12 +70,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const draw = () => {
     current.forEach(i => {
       squares[currentPosition + i].classList.add("tetromino");
+      squares[currentPosition + i].style.backgroundColor = colors[random];
     })
   }
 
   const undraw = () => {
     current.forEach(i => {
       squares[currentPosition + i].classList.remove("tetromino");
+      squares[currentPosition + i].style.backgroundColor = "";
     });
   }
 
@@ -111,6 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
       draw();
       displayShape();
       addScore();
+      gameOver();
     }
   }
 
@@ -166,10 +176,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const displayShape = () => {
     displaySquares.forEach(square => {
       square.classList.remove("tetromino")
+      square.style.backgroundColor = "";
     });
 
     upNextTetrominoes[nextRandom].forEach(i => {
       displaySquares[displayIndex + i].classList.add("tetromino");
+      displaySquares[displayIndex + i].style.backgroundColor = colors[nextRandom];
     });
   }
 
@@ -206,15 +218,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
         row.forEach((i) => {
           squares[i].classList.remove("taken");
-          squares[i].classList.remove("tetromino")
+          squares[i].classList.remove("tetromino");
+          squares[i].style.backgroundColor = "";
         });
 
         const squaresRemoved = squares.splice(i, GRID_WIDTH);
-        console.log(squaresRemoved);
 
         squares = squaresRemoved.concat(squares)
         squares.forEach(cell => grid.appendChild(cell))
       }
+    }
+  }
+
+  const gameOver = () => {
+    if(current.some(i => squares[currentPosition + i].classList.contains("taken"))) {
+      scoreDisplay.innerHTML = "end";
+      clearInterval(timerId);
     }
   }
 
